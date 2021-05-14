@@ -1,15 +1,7 @@
-<a id='x-28GLITFENESTRO-2EDOCS-3A-40INDEX-20MGL-PAX-3ASECTION-29'></a>
-
 # GLITFENESTRO: Sliding Window
 
-## Table of Contents
-
-- [1 Iterate Drivers][5a66]
-    - [1.1 WINDOWING-BY][2efc]
-    - [1.2 WINDOWING-IF][97c5]
-
 ###### \[in package GLITFENESTRO.DOCS with nicknames GFRO-DOCS\]
-`GLITFENESTRO` is a package for analysis of sequences using sliding windows. A *window* or *frame* is a subsequence of consecutive elements sampled from the main sequence. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions<sup>[1](#r-slider)</sup>.
+GLITFENESTRO is a package for analysis of sequences using sliding windows. A *window* or *frame* is a subsequence of consecutive elements sampled from the main sequence. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions<sup>[1](#r-slider)</sup>.
 <blockquote class="note">
 GLITFENESTRO (*Esperanto*) <==> Sliding Window (*English*)
 </blockquote>
@@ -22,17 +14,13 @@ This package contains,
 that provide flexible sliding window functionality for analyzing sequences. See GLITFENESTRO.DOCS:@API-REFERENCE for details.
   
 
-<a id='x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29'></a>
-
-## 1 Iterate Drivers
+## Iterate Drivers
 
 ###### \[in package GLITFENESTRO with nicknames GFRO\]
 Two drivers are defined for the [iterate](https://common-lisp.net/project/iterate/doc/index.html) package,
-**`WINDOWING-BY`** and **`WINDOWING-IF`**. **`WINDOWING-BY`** is for fixed or variable window size. **`WINDOWING-IF`** is for window sizes that satisfy a predicate.
+**WINDOWING-BY** and **WINDOWING-IF**. **WINDOWING-BY** is for fixed or variable window size. **WINDOWING-IF** is for window sizes that satisfy a predicate.
 
-<a id='x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29'></a>
-
-### 1.1 WINDOWING-BY
+### WINDOWING-BY
 
 **DEFINITION**
 
@@ -44,25 +32,25 @@ FOR binding-form SLIDING-ACROSS seq WINDOWING-BY size SKIPPING-BY skip
 
 Iterate by fixed or variable window size sliding across a sequence
 
-**`KEYWORD` ARGUMENTS**
+**KEYWORD ARGUMENTS**
 
-`BINDING-FORM` -- a variable or two-variable proper list
+BINDING-FORM -- a variable or two-variable proper list
 
-`SEQ` -- a proper sequence
+SEQ -- a proper sequence
 
-`SIZE` -- an integer or proper sequence of integers
+SIZE -- an integer or proper sequence of integers
 
-`SKIP` -- an integer or proper sequence of integers
+SKIP -- an integer or proper sequence of integers
 
-**`RETURN` `VALUES`**
+**RETURN VALUES**
 
-For each iteration, a sequence of length `SIZE`.
+For each iteration, a sequence of length SIZE.
 
 **DESCRIPTION**
 
-A single variable `BINDING-FORM` contains the window sub-sequence for each iteration. For a list pair `BINDING-FORM`, the first variable contains the window sub-sequence and the second is a list pair containing the window start and end indices.
+A single variable BINDING-FORM contains the window sub-sequence for each iteration. For a list pair BINDING-FORM, the first variable contains the window sub-sequence and the second is a list pair containing the window start and end indices.
 
-This driver is useful when iterating a fixed or variable sliding window across a sequence. Each iteration returns a sub-sequence of size `SIZE` after skipping `SKIP` elements in the sequence (see examples for further details).
+This driver is useful when iterating a fixed or variable sliding window across a sequence. Each iteration returns a sub-sequence of size SIZE after skipping SKIP elements in the sequence (see examples for further details).
 
 **NOTES**
 
@@ -82,7 +70,7 @@ The most basic use is with fixed size and skip,
 
 Functionality of many of `Serapeum`'s sequence functions can be obtained using this driver.
 
-A `SKIP` of 0 yields output similar to the `serapeum:batches`,
+A SKIP of 0 yields output similar to the `serapeum:batches`,
 
 ```cl-transcript
 (iter
@@ -99,7 +87,7 @@ A `SKIP` of 0 yields output similar to the `serapeum:batches`,
 
 ```
 
-The iterate driver is more flexible of course! For example, overlap can be obtained using a  *negative* `SKIP`,
+The iterate driver is more flexible of course! For example, overlap can be obtained using a  *negative* SKIP,
 
 ```cl-transcript
 (iter
@@ -124,7 +112,7 @@ The iterate driver is more flexible of course! For example, overlap can be obtai
 <details>
 <summary> ***Window Indices and Overhang*** </summary>
 
-Both the `SIZE` and `SKIP` can be numeric seqeunces. In such cases windowing only occurs until the shorter of `SIZE` or `SKIP`.
+Both the SIZE and SKIP can be numeric seqeunces. In such cases windowing only occurs until the shorter of SIZE or SKIP.
 
 ```cl-transcript
 (iter
@@ -174,7 +162,7 @@ As an example of the usefulness of the indices, consider extrating the overhang 
 
 The overhang is provided by default in `serapeum:batches`, while it needs to be explicitly obtained when using the driver as shown above.
 
-Of course the `SIZE` and `SKIP` lists can be heterogenous,
+Of course the SIZE and SKIP lists can be heterogenous,
 
 ```cl-transcript
 (iter
@@ -244,7 +232,7 @@ One useful instance is when generating sequences by recursion, starting from som
 
 ```
 
-where the shorter of the `WINDOWING-BY` or `SKIPPING-BY` series determines the length of the generated sequence.
+where the shorter of the WINDOWING-BY or SKIPPING-BY series determines the length of the generated sequence.
 </details>
 
 <details>
@@ -534,9 +522,7 @@ The driver is reasonably performant. An array sequence of 1 million elements tak
 ```
 
 
-<a id='x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29'></a>
-
-### 1.2 WINDOWING-IF
+### WINDOWING-IF
 
 **DEFINITION**
 
@@ -548,21 +534,21 @@ FOR binding-form SLIDING-ACROSS seq WINDOWING-IF window-predicate
 
 Iterate by window consisting of consecutive elements satisifying `WINDOW-PREDICATE` sliding across a sequence
 
-**`KEYWORD` ARGUMENTS**
+**KEYWORD ARGUMENTS**
 
-`BINDING-FORM` -- a variable or two-variable proper list
+BINDING-FORM -- a variable or two-variable proper list
 
-`SEQ` -- a proper sequence
+SEQ -- a proper sequence
 
-`WINDOW-PREDICATE` -- a designator for a function of one argument that returns a generalized boolean
+WINDOW-PREDICATE -- a designator for a function of one argument that returns a generalized boolean
 
-**`RETURN` `VALUES`**
+**RETURN VALUES**
 
 For each iteration, a sub-sequence of consecutive elements satisfying `WINDOW-PREDICATE`.
 
 **DESCRIPTION**
 
-A single variable `BINDING-FORM` contains the window sub-sequence for each iteration. For a list pair `BINDING-FORM`, the first variable contains the window sub-sequence and the second is a list pair containing the window start and end indices.
+A single variable BINDING-FORM contains the window sub-sequence for each iteration. For a list pair BINDING-FORM, the first variable contains the window sub-sequence and the second is a list pair containing the window start and end indices.
 
 This driver is useful when iterating a sliding window across a sequence. Each iteration returns a sub-sequence consisting of consecutive elements that satisfy a given predicate.
 
@@ -658,10 +644,6 @@ Convert from base B to base N,
 
 <a name="r-slider">1</a>: [Slider R Package](https://cran.r-project.org/web/packages/slider/vignettes/slider.html)
   
-
-  [2efc]: #x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29 "WINDOWING-BY"
-  [5a66]: #x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29 "Iterate Drivers"
-  [97c5]: #x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29 "WINDOWING-IF"
 
 * * *
 ###### \[generated by [MGL-PAX](https://github.com/melisgl/mgl-pax)\]
