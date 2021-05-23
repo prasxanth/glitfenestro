@@ -17,6 +17,7 @@ that provide flexible sliding window functionality for analyzing sequences. See 
   "
   (@asdf-details section)
   (@system-details section)
+  (@installation section)
   (@iterate section)
 
   "
@@ -53,4 +54,41 @@ This package was developed and tested on,
   - **Lisp**: SBCL 2.1.3
   - **IDE**: EMACS SLIME
 
+  ")
+
+
+(defsection @installation (:title "Installation")
+  "
+
+This package is not available through `QUICKLISP` (yet), so it must be manually loaded. To do so, create a softlink to `~/quicklisp/local-projects`,
+
+```
+ln -s ~/glitfenestro/source/location ~/quicklisp/local-projects/glitfenestro
+```
+
+Quickload the project in SLIME to make it available,
+
+```
+(ql:quickload :glitfenestro)
+```
+
+The `iterate` package is a dependency,
+
+```
+(ql:quickload :iterate)
+(use-package :iterate)
+```
+
+To run the tests,
+
+```
+(asdf:test-system :glitfenestro)
+```
+
+To generate the documentation,
+
+```
+(ql:quickload :glitfenestro/docs)
+(gfro-docs:build)
+```
   ")

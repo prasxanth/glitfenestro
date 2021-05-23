@@ -36,11 +36,12 @@
 <ul>
 <li><a href="#x-28GLITFENESTRO-2EDOCS-3A-40ASDF-DETAILS-20MGL-PAX-3ASECTION-29" title="ASDF Details">1 ASDF Details</a></li>
 <li><a href="#x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29" title="System Details">2 System Details</a></li>
-<li><a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">3 Iterate Drivers</a>
+<li><a href="#x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29" title="Installation">3 Installation</a></li>
+<li><a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">4 Iterate Drivers</a>
 
 <ul>
-<li><a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29" title="WINDOWING-BY">3.1 WINDOWING-BY</a></li>
-<li><a href="#x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29" title="WINDOWING-IF">3.2 WINDOWING-IF</a></li>
+<li><a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29" title="WINDOWING-BY">4.1 WINDOWING-BY</a></li>
+<li><a href="#x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29" title="WINDOWING-IF">4.2 WINDOWING-IF</a></li>
 </ul></li>
 </ul>
 
@@ -78,7 +79,7 @@ This package contains,</p>
 
 <p><a id='x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40ASDF-DETAILS-20MGL-PAX-3ASECTION-29" title="ASDF Details">&#8592;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INDEX-20MGL-PAX-3ASECTION-29" title="GLITFENESTRO: Sliding Window">&#8593;</a> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8594;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29" title="System Details">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40ASDF-DETAILS-20MGL-PAX-3ASECTION-29" title="ASDF Details">&#8592;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INDEX-20MGL-PAX-3ASECTION-29" title="GLITFENESTRO: Sliding Window">&#8593;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29" title="Installation">&#8594;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29" title="System Details">&#8634;</a></span></span></p>
 
 <h2><a href="#x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29">2 System Details</a></h2>
 
@@ -92,11 +93,39 @@ This package contains,</p>
 <li><p><strong>IDE</strong>: EMACS SLIME</p></li>
 </ul>
 
+<p><a id='x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29'></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29" title="System Details">&#8592;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INDEX-20MGL-PAX-3ASECTION-29" title="GLITFENESTRO: Sliding Window">&#8593;</a> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8594;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29" title="Installation">&#8634;</a></span></span></p>
+
+<h2><a href="#x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29">3 Installation</a></h2>
+
+<p>This package is not available through <code>QUICKLISP</code> (yet), so it must be manually loaded. To do so, create a softlink to <code>~/quicklisp/local-projects</code>,</p>
+
+<pre><code><span class="code">ln -s ~/glitfenestro/source/location ~/quicklisp/local-projects/glitfenestro</span></code></pre>
+
+<p>Quickload the project in SLIME to make it available,</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code">ql:quickload <span class="keyword">:glitfenestro</span></span>)</span></span></code></pre>
+
+<p>The <code>iterate</code> package is a dependency,</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code">ql:quickload <span class="keyword">:iterate</span></span>)</span>
+<span class="paren1">(<span class="code">use-package <span class="keyword">:iterate</span></span>)</span></span></code></pre>
+
+<p>To run the tests,</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code">asdf:test-system <span class="keyword">:glitfenestro</span></span>)</span></span></code></pre>
+
+<p>To generate the documentation,</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code">ql:quickload <span class="keyword">:glitfenestro/docs</span></span>)</span>
+<span class="paren1">(<span class="code">gfro-docs:build</span>)</span></span></code></pre>
+
 <p><a id='x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29" title="System Details">&#8592;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INDEX-20MGL-PAX-3ASECTION-29" title="GLITFENESTRO: Sliding Window">&#8593;</a> <a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29" title="WINDOWING-BY">&#8594;</a> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29" title="Installation">&#8592;</a> <a href="#x-28GLITFENESTRO-2EDOCS-3A-40INDEX-20MGL-PAX-3ASECTION-29" title="GLITFENESTRO: Sliding Window">&#8593;</a> <a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29" title="WINDOWING-BY">&#8594;</a> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29">3 Iterate Drivers</a></h2>
+<h2><a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29">4 Iterate Drivers</a></h2>
 
 <h6>[in package GLITFENESTRO with nicknames GFRO]</h6>
 
@@ -107,7 +136,7 @@ This package contains,</p>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8592;</a> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8593;</a> <a href="#x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29" title="WINDOWING-IF">&#8594;</a> <a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29" title="WINDOWING-BY">&#8634;</a></span></span></p>
 
-<h3><a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29">3.1 WINDOWING-BY</a></h3>
+<h3><a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29">4.1 WINDOWING-BY</a></h3>
 
 <p><strong>DEFINITION</strong></p>
 
@@ -556,7 +585,7 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29" title="WINDOWING-BY">&#8592;</a> <a href="#x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29" title="Iterate Drivers">&#8593;</a> <a href="#x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29" title="WINDOWING-IF">&#8634;</a></span></span></p>
 
-<h3><a href="#x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29">3.2 WINDOWING-IF</a></h3>
+<h3><a href="#x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29">4.2 WINDOWING-IF</a></h3>
 
 <p><strong>DEFINITION</strong></p>
 

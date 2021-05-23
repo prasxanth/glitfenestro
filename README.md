@@ -6,9 +6,10 @@
 
 - [1 ASDF Details][7752]
 - [2 System Details][a006]
-- [3 Iterate Drivers][5a66]
-    - [3.1 WINDOWING-BY][2efc]
-    - [3.2 WINDOWING-IF][97c5]
+- [3 Installation][751c]
+- [4 Iterate Drivers][5a66]
+    - [4.1 WINDOWING-BY][2efc]
+    - [4.2 WINDOWING-IF][97c5]
 
 ###### \[in package GLITFENESTRO.DOCS with nicknames GFRO-DOCS\]
 `GLITFENESTRO` is a package for analysis of sequences using sliding windows. A *window* or *frame* is a subsequence of consecutive elements sampled from the main sequence. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions<sup>[1](#r-slider)</sup>.
@@ -63,9 +64,47 @@ This package was developed and tested on,
 
   
 
+<a id='x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29'></a>
+
+## 3 Installation
+
+This package is not available through `QUICKLISP` (yet), so it must be manually loaded. To do so, create a softlink to `~/quicklisp/local-projects`,
+
+```
+ln -s ~/glitfenestro/source/location ~/quicklisp/local-projects/glitfenestro
+```
+
+Quickload the project in SLIME to make it available,
+
+```
+(ql:quickload :glitfenestro)
+```
+
+The `iterate` package is a dependency,
+
+```
+(ql:quickload :iterate)
+(use-package :iterate)
+```
+
+To run the tests,
+
+```
+(asdf:test-system :glitfenestro)
+```
+
+To generate the documentation,
+
+```
+(ql:quickload :glitfenestro/docs)
+(gfro-docs:build)
+```
+
+  
+
 <a id='x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29'></a>
 
-## 3 Iterate Drivers
+## 4 Iterate Drivers
 
 ###### \[in package GLITFENESTRO with nicknames GFRO\]
 Two drivers are defined for the [iterate](https://common-lisp.net/project/iterate/doc/index.html) package,
@@ -73,7 +112,7 @@ Two drivers are defined for the [iterate](https://common-lisp.net/project/iterat
 
 <a id='x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29'></a>
 
-### 3.1 WINDOWING-BY
+### 4.1 WINDOWING-BY
 
 **DEFINITION**
 
@@ -587,7 +626,7 @@ The driver is reasonably performant. An array sequence of 1 million elements tak
 
 <a id='x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29'></a>
 
-### 3.2 WINDOWING-IF
+### 4.2 WINDOWING-IF
 
 **DEFINITION**
 
@@ -784,6 +823,7 @@ The driver is reasonably performant. An array sequence of 1 million elements tak
 
   [2efc]: #x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29 "WINDOWING-BY"
   [5a66]: #x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29 "Iterate Drivers"
+  [751c]: #x-28GLITFENESTRO-2EDOCS-3A-40INSTALLATION-20MGL-PAX-3ASECTION-29 "Installation"
   [7752]: #x-28GLITFENESTRO-2EDOCS-3A-40ASDF-DETAILS-20MGL-PAX-3ASECTION-29 "ASDF Details"
   [97c5]: #x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29 "WINDOWING-IF"
   [a006]: #x-28GLITFENESTRO-2EDOCS-3A-40SYSTEM-DETAILS-20MGL-PAX-3ASECTION-29 "System Details"
