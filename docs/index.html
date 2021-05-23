@@ -104,6 +104,12 @@ This package contains,</p>
 
 <p><strong>NOTES</strong></p>
 
+<p>The following is assumed in all examples that follow,</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:glitfenestro</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:iterate</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">use-package <span class="keyword">:iterate</span></span>)</span></span></code></pre>
+
 <p><details open>
 <summary> <strong><em>Basic Use</em></strong> </summary></p>
 
@@ -152,7 +158,7 @@ This package contains,</p>
 <p><details>
 <summary> <strong><em>Window Indices and Overhang</em></strong> </summary></p>
 
-<p>Both the <code>SIZE</code> and <code>SKIP</code> can be numeric seqeunces. In such cases windowing only occurs until the shorter of <code>SIZE</code> or <code>SKIP</code>.</p>
+<p>Both the <code>SIZE</code> and <code>SKIP</code> can be numeric sequences. In such cases windowing only occurs until the shorter of <code>SIZE</code> or <code>SKIP</code>.</p>
 
 <pre><code>(iter
   (with seq = (alexandria:iota 20))
@@ -478,35 +484,37 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
 
 <p>The driver is reasonably performant. An array sequence of 1 million elements takes less than 0.3s to process.</p>
 
-<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">flet</span></i> <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">random-range <span class="paren4">(<span class="code">n</span>)</span> <span class="paren4">(<span class="code">- <span class="paren5">(<span class="code">random <span class="paren6">(<span class="code">1+ <span class="paren1">(<span class="code">* 2 n</span>)</span></span>)</span></span>)</span> n</span>)</span></span>)</span></span>)</span>
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">flet</span></i> <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">random-range <span class="paren4">(<span class="code">n</span>)</span> <span class="paren4">(<span class="code">- <span class="paren5">(<span class="code">random <span class="paren6">(<span class="code">1+ <span class="paren1">(<span class="code">* 2 n</span>)</span></span>)</span></span>)</span> n</span>)</span></span>)</span>
+       <span class="paren3">(<span class="code">loop-random <span class="paren4">(<span class="code">f n</span>)</span> <span class="paren4">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren5">(<span class="code">funcall f n</span>)</span></span>)</span></span>)</span></span>)</span>
   <span class="paren2">(<span class="code">time
     <span class="paren3">(<span class="code">iter
-      <span class="paren4">(<span class="code">with seq = <span class="paren5">(<span class="code">make-array 1000000 <span class="keyword">:initial-contents</span> <span class="paren6">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren1">(<span class="code">random 101</span>)</span></span>)</span></span>)</span></span>)</span>
-      <span class="paren4">(<span class="code">with win = <span class="paren5">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren6">(<span class="code">random 5</span>)</span></span>)</span></span>)</span>
-      <span class="paren4">(<span class="code">with skip = <span class="paren5">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren6">(<span class="code">random-range 5</span>)</span></span>)</span></span>)</span>
+      <span class="paren4">(<span class="code">with seq = <span class="paren5">(<span class="code">make-array 1000000 <span class="keyword">:initial-contents</span> <span class="paren6">(<span class="code">loop-random #'random 101</span>)</span></span>)</span></span>)</span>
+      <span class="paren4">(<span class="code">with win = <span class="paren5">(<span class="code">loop-random #'random 5</span>)</span></span>)</span>
+      <span class="paren4">(<span class="code">with skip = <span class="paren5">(<span class="code">loop-random #'random-range 5</span>)</span></span>)</span>
       <span class="paren4">(<span class="code">for w <span class="keyword">:sliding-across</span> seq <span class="keyword">:windowing-by</span> win <span class="keyword">:skipping-by</span> skip</span>)</span></span>)</span></span>)</span></span>)</span>
 
 .. Evaluation took:
-..   0.142 seconds of real time
-..   0.143495 seconds of total run time <span class="paren1">(<span class="code">0.136580 user, 0.006915 system</span>)</span>
-..   [ Run times consist of 0.055 seconds GC time, and 0.089 seconds non-GC time. ]
-..   100.70% CPU
-..   328,242,728 processor cycles
-..   73,693,568 bytes consed
+..   0.145 seconds of real time
+..   0.146188 seconds of total run time <span class="paren1">(<span class="code">0.137569 user, 0.008619 system</span>)</span>
+..   [ Run times consist of 0.053 seconds GC time, and 0.094 seconds non-GC time. ]
+..   100.69% CPU
+..   336,167,382 processor cycles
+..   73,595,808 bytes consed
 =&gt; NIL</span></code></pre>
 
-<pre><code><span class="code"><span class="paren1">(<span class="code">time
-  <span class="paren2">(<span class="code">iter
-    <span class="paren3">(<span class="code">with seq = <span class="paren4">(<span class="code">make-array 1000000 <span class="keyword">:initial-contents</span> <span class="paren5">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren6">(<span class="code">random 101</span>)</span></span>)</span></span>)</span></span>)</span>
-    <span class="paren3">(<span class="code">for w <span class="keyword">:sliding-across</span> seq <span class="keyword">:windowing-by</span> 2 <span class="keyword">:skipping-by</span> -1</span>)</span></span>)</span></span>)</span>
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">flet</span></i> <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">loop-random <span class="paren4">(<span class="code">f n</span>)</span> <span class="paren4">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren5">(<span class="code">funcall f n</span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="paren2">(<span class="code">time
+    <span class="paren3">(<span class="code">iter
+      <span class="paren4">(<span class="code">with seq = <span class="paren5">(<span class="code">make-array 1000000 <span class="keyword">:initial-contents</span> <span class="paren6">(<span class="code">loop-random #'random 101</span>)</span></span>)</span></span>)</span>
+      <span class="paren4">(<span class="code">for w <span class="keyword">:sliding-across</span> seq <span class="keyword">:windowing-by</span> 2 <span class="keyword">:skipping-by</span> -1</span>)</span></span>)</span></span>)</span></span>)</span>
 
 .. Evaluation took:
-..   0.114 seconds of real time
-..   0.114921 seconds of total run time <span class="paren1">(<span class="code">0.097959 user, 0.016962 system</span>)</span>
-..   [ Run times consist of 0.023 seconds GC time, and 0.092 seconds non-GC time. ]
-..   100.88% CPU
-..   264,150,066 processor cycles
-..   71,985,760 bytes consed
+..   0.224 seconds of real time
+..   0.225691 seconds of total run time <span class="paren1">(<span class="code">0.176494 user, 0.049197 system</span>)</span>
+..   [ Run times consist of 0.135 seconds GC time, and 0.091 seconds non-GC time. ]
+..   100.89% CPU
+..   518,013,836 processor cycles
+..   88,001,104 bytes consed
 =&gt; NIL</span></code></pre>
 
 <p><a id='x-28GLITFENESTRO-3A-40WINDOWING-IF-20MGL-PAX-3ASECTION-29'></a></p>
@@ -543,15 +551,16 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
 
 <p><strong>NOTES</strong></p>
 
+<p>The following is assumed in all examples that follow,</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:glitfenestro</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:iterate</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">use-package <span class="keyword">:iterate</span></span>)</span></span></code></pre>
+
 <p><details open>
 <summary> <strong><em>Basic Use</em></strong> </summary></p>
 
-<pre><code>(iter
-  (with seq = '(1 1 1 1 2 2 2 3 3 3 2 2 4 4 4 1 1 5 5 5))
-  (for (w i) :sliding-across seq :windowing-if #'evenp)
-  (collect (list w i)))
-=&gt; (((2 2 2) (4 6)) ((2 2 4 4 4) (10 14)))
-</code></pre>
+<p>The most basic use is with a sequence and a <code>WINDOWING-IF</code> predicate function,</p>
 
 <pre><code>(iter
   (with seq = '(1 3 5 2 6 7 9 4 8 4 3 2 8 8 8 9 0 0 2 4 5 3))
@@ -560,12 +569,25 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
 =&gt; ((1 3 5) (7 9) (3) (9) (5 3))
 </code></pre>
 
-<p>Run length encoding</p>
+<p>The &quot;full form&quot; of the driver returns two values: (1) the window and (2) a 2 element list with the start and end indices of each window group,</p>
+
+<pre><code>(iter
+  (with seq = '(1 1 1 1 2 2 2 3 3 3 2 2 4 4 4 1 1 5 5 5))
+  (for (w i) :sliding-across seq :windowing-if #'evenp)
+  (collect (list w i)))
+=&gt; (((2 2 2) (4 6)) ((2 2 4 4 4) (10 14)))
+</code></pre>
+
+<p><details>
+<summary> <strong><em>Run Length Encoding</em></strong> </summary></p>
+
+<p>The driver is very useful for sequences where repeated elements have to be categorized in some way. Consider the run length encoding (RLE) example below,</p>
 
 <pre><code>(iter
   (with seq = '(1 1 1 2 2 2 2 3 3 4 4 4 4 5 5 5 5 5 5 5 6 7 7))
   (with group-elt = (elt seq 0))
-  (for (w i) :sliding-across seq :windowing-if (lambda(x) (= group-elt x)))
+  (for (w i) :sliding-across seq
+             :windowing-if (lambda(x) (= group-elt x)))
   (collect (list (car w) (length w)) into result)
   (for second-index = (cadr i))
   (unless (&gt; (incf second-index) (length seq))
@@ -574,7 +596,7 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
 =&gt; ((1 3) (2 4) (3 2) (4 4) (5 7) (6 1) (7 2))
 </code></pre>
 
-<p>RLE Rosetta Code problem</p>
+<p>Another example from <a href="https://www.rosettacode.org/wiki/Run-length_encoding" >Rosetta Code</a> illustrates RLE on strings,</p>
 
 <pre><code><span class="code"><span class="paren1">(<span class="code">iter
   <span class="paren2">(<span class="code">with str = <span class="string">"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW"</span></span>)</span>
@@ -588,7 +610,12 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
   <span class="paren2">(<span class="code">finally <span class="paren3">(<span class="code">return result</span>)</span></span>)</span></span>)</span>
 =&gt; <span class="paren1">(<span class="code"><span class="paren2">(<span class="code">#W 12</span>)</span> <span class="paren2">(<span class="code">#B 1</span>)</span> <span class="paren2">(<span class="code">#W 12</span>)</span> <span class="paren2">(<span class="code">#B 3</span>)</span> <span class="paren2">(<span class="code">#W 24</span>)</span> <span class="paren2">(<span class="code">#B 1</span>)</span> <span class="paren2">(<span class="code">#W 14</span>)</span></span>)</span></span></code></pre>
 
-<p>Split string by delimiter or regex,</p>
+<p></details></p>
+
+<p><details>
+<summary> <strong><em>Split Strings by Delimiter</em></strong> </summary></p>
+
+<p>A natural use case for the driver is to split strings by a delimiter,</p>
 
 <pre><code><span class="code"><span class="paren1">(<span class="code">iter
   <span class="paren2">(<span class="code">with str = <span class="string">"The quick brown fox jumps over the lazy dog"</span></span>)</span>
@@ -597,23 +624,67 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
   <span class="paren2">(<span class="code">collect w</span>)</span></span>)</span>
 =&gt; <span class="paren1">(<span class="code"><span class="string">"The"</span> <span class="string">"quick"</span> <span class="string">"brown"</span> <span class="string">"fox"</span> <span class="string">"jumps"</span> <span class="string">"over"</span> <span class="string">"the"</span> <span class="string">"lazy"</span> <span class="string">"dog"</span></span>)</span></span></code></pre>
 
-<p>Convert from base B to base N,</p>
+<p>The <code>cl-ppcre</code> package is better suited for windowing by regex.</p>
 
-<pre><code><span class="code"><span class="paren1">(<span class="code">iter
-  <span class="paren2">(<span class="code">with bit-vector = #*110110011</span>)</span>
-  <span class="paren2">(<span class="code">with bit-len = <span class="paren3">(<span class="code">1- <span class="paren4">(<span class="code">length bit-vector</span>)</span></span>)</span></span>)</span>
-  <span class="paren2">(<span class="code">for <span class="paren3">(<span class="code">w i</span>)</span> <span class="keyword">:sliding-across</span> bit-vector
-             <span class="keyword">:windowing-if</span> <span class="paren3">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren4">(<span class="code">x</span>)</span> <span class="paren4">(<span class="code">= x 1</span>)</span></span>)</span></span>)</span>
-  <span class="paren2">(<span class="code">for start = <span class="paren3">(<span class="code">car i</span>)</span></span>)</span>
-  <span class="paren2">(<span class="code">for stop = <span class="paren3">(<span class="code">cadr i</span>)</span></span>)</span>
-  <span class="paren2">(<span class="code">for n = <span class="paren3">(<span class="code">1+ <span class="paren4">(<span class="code">- stop start</span>)</span></span>)</span></span>)</span>
-  <span class="paren2">(<span class="code">nconcing <span class="paren3">(<span class="code">mapcar <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">x</span>)</span> <span class="paren5">(<span class="code">expt 2 <span class="paren6">(<span class="code">- bit-len x</span>)</span></span>)</span></span>)</span>
-     <span class="paren4">(<span class="code">alexandria:iota n <span class="keyword">:start</span> start <span class="keyword">:step</span> 1</span>)</span></span>)</span> into result</span>)</span>
-  <span class="paren2">(<span class="code">finally <span class="paren3">(<span class="code">return <span class="paren4">(<span class="code">reduce #'+ result</span>)</span></span>)</span></span>)</span></span>)</span>
-=&gt; 435</span></code></pre>
+<p></details></p>
 
-<p></details>
-```</p>
+<p><details>
+<summary> <strong><em>Filtering</em></strong> </summary></p>
+
+<p>The <code>WINDOWING-IF</code> predicate obviously lends itself to filtering functionality,</p>
+
+<pre><code>(iter
+  (with mat = #(#(1 3 2) #(-1 0 -3) #(9 6 8)))
+  (for w :sliding-across mat
+         :windowing-if (lambda (x) (every #'plusp x)))
+  (collect w))
+=&gt; (#(#(1 3 2)) #(#(9 6 8)))
+</code></pre>
+
+<p></details></p>
+
+<p><details>
+<summary> <strong><em>Edge Cases</em></strong> </summary></p>
+
+<p>An empty sequence returns <code>NIL</code>,</p>
+
+<pre><code>(iter
+  (with seq = '())
+  (for w :sliding-across seq :windowing-if #'zerop)
+  (collect w))
+=&gt; NIL
+</code></pre>
+
+<p><code>NIL</code> is also returned if no contigous elements satisfy the predicate,</p>
+
+<pre><code>(iter
+  (with seq = '(1 5 2 3 4))
+  (for w :sliding-across seq :windowing-if #'zerop)
+  (collect w))
+=&gt; NIL
+</code></pre>
+
+<p></details></p>
+
+<p><strong>PERFORMANCE</strong></p>
+
+<p>The driver is reasonably performant. An array sequence of 1 million elements takes less than 0.3s to process.</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">flet</span></i> <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">random-range <span class="paren4">(<span class="code">n</span>)</span> <span class="paren4">(<span class="code">- <span class="paren5">(<span class="code">random <span class="paren6">(<span class="code">1+ <span class="paren1">(<span class="code">* 2 n</span>)</span></span>)</span></span>)</span> n</span>)</span></span>)</span>
+       <span class="paren3">(<span class="code">loop-random <span class="paren4">(<span class="code">f n</span>)</span> <span class="paren4">(<span class="code"><i><span class="symbol">loop</span></i> for i from 0 below 1000000 collect <span class="paren5">(<span class="code">funcall f n</span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="paren2">(<span class="code">time
+    <span class="paren3">(<span class="code">iter
+      <span class="paren4">(<span class="code">with seq = <span class="paren5">(<span class="code">make-array 1000000 <span class="keyword">:initial-contents</span> <span class="paren6">(<span class="code">loop-random #'random 101</span>)</span></span>)</span></span>)</span>
+       <span class="paren4">(<span class="code">for w <span class="keyword">:sliding-across</span> seq <span class="keyword">:windowing-if</span> #'plusp</span>)</span></span>)</span></span>)</span></span>)</span>
+
+.. Evaluation took:
+..   0.125 seconds of real time
+..   0.126364 seconds of total run time <span class="paren1">(<span class="code">0.074001 user, 0.052363 system</span>)</span>
+..   [ Run times consist of 0.067 seconds GC time, and 0.060 seconds non-GC time. ]
+..   100.80% CPU
+..   289,933,222 processor cycles
+..   32,118,304 bytes consed
+=&gt; NIL</span></code></pre>
 
 <p><br> <br></p>
 

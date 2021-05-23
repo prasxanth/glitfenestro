@@ -41,6 +41,14 @@ This driver is useful when iterating a fixed or variable sliding window across a
 
 **NOTES**
 
+The following is assumed in all examples that follow,
+
+```
+CL-USER> (ql:quickload :glitfenestro)
+CL-USER> (ql:quickload :iterate)
+CL-USER> (use-package :iterate)
+```
+
 <details open>
 <summary> __*Basic Use*__ </summary>
 
@@ -94,7 +102,7 @@ The iterate driver is more flexible of course! For example, overlap can be obtai
 <details>
 <summary> __*Window Indices and Overhang*__ </summary>
 
-Both the SIZE and SKIP can be numeric seqeunces. In such cases windowing only occurs until the shorter of SIZE or SKIP.
+Both the SIZE and SKIP can be numeric sequences. In such cases windowing only occurs until the shorter of SIZE or SKIP.
 
 ```cl-transcript
 (iter
@@ -448,39 +456,40 @@ Following are the results on a 64bit Mac with a 2.3 GHz 8-Core Intel Core i9 pro
 
 The driver is reasonably performant. An array sequence of 1 million elements takes less than 0.3s to process.
 
-
 ```
-(flet ((random-range (n) (- (random (1+ (* 2 n))) n)))
+(flet ((random-range (n) (- (random (1+ (* 2 n))) n))
+       (loop-random (f n) (loop for i from 0 below 1000000 collect (funcall f n))))
   (time
     (iter
-      (with seq = (make-array 1000000 :initial-contents (loop for i from 0 below 1000000 collect (random 101))))
-      (with win = (loop for i from 0 below 1000000 collect (random 5)))
-      (with skip = (loop for i from 0 below 1000000 collect (random-range 5)))
+      (with seq = (make-array 1000000 :initial-contents (loop-random #'random 101)))
+      (with win = (loop-random #'random 5))
+      (with skip = (loop-random #'random-range 5))
       (for w :sliding-across seq :windowing-by win :skipping-by skip))))
 
 .. Evaluation took:
-..   0.142 seconds of real time
-..   0.143495 seconds of total run time (0.136580 user, 0.006915 system)
-..   [ Run times consist of 0.055 seconds GC time, and 0.089 seconds non-GC time. ]
-..   100.70% CPU
-..   328,242,728 processor cycles
-..   73,693,568 bytes consed
+..   0.145 seconds of real time
+..   0.146188 seconds of total run time (0.137569 user, 0.008619 system)
+..   [ Run times consist of 0.053 seconds GC time, and 0.094 seconds non-GC time. ]
+..   100.69% CPU
+..   336,167,382 processor cycles
+..   73,595,808 bytes consed
 => NIL
 ```
 
 ```
-(time
-  (iter
-    (with seq = (make-array 1000000 :initial-contents (loop for i from 0 below 1000000 collect (random 101))))
-    (for w :sliding-across seq :windowing-by 2 :skipping-by -1)))
+(flet ((loop-random (f n) (loop for i from 0 below 1000000 collect (funcall f n))))
+  (time
+    (iter
+      (with seq = (make-array 1000000 :initial-contents (loop-random #'random 101)))
+      (for w :sliding-across seq :windowing-by 2 :skipping-by -1))))
 
 .. Evaluation took:
-..   0.114 seconds of real time
-..   0.114921 seconds of total run time (0.097959 user, 0.016962 system)
-..   [ Run times consist of 0.023 seconds GC time, and 0.092 seconds non-GC time. ]
-..   100.88% CPU
-..   264,150,066 processor cycles
-..   71,985,760 bytes consed
+..   0.224 seconds of real time
+..   0.225691 seconds of total run time (0.176494 user, 0.049197 system)
+..   [ Run times consist of 0.135 seconds GC time, and 0.091 seconds non-GC time. ]
+..   100.89% CPU
+..   518,013,836 processor cycles
+..   88,001,104 bytes consed
 => NIL
 ```
 
@@ -624,8 +633,28 @@ This driver is useful when iterating a sliding window across a sequence. Each it
 
 **NOTES**
 
+The following is assumed in all examples that follow,
+
+```
+CL-USER> (ql:quickload :glitfenestro)
+CL-USER> (ql:quickload :iterate)
+CL-USER> (use-package :iterate)
+```
+
 <details open>
 <summary> __*Basic Use*__ </summary>
+
+The most basic use is with a sequence and a `WINDOWING-IF` predicate function,
+
+```cl-transcript
+(iter
+  (with seq = '(1 3 5 2 6 7 9 4 8 4 3 2 8 8 8 9 0 0 2 4 5 3))
+  (for w :sliding-across seq :windowing-if #'oddp)
+  (collect w))
+=> ((1 3 5) (7 9) (3) (9) (5 3))
+```
+
+The \"full form\" of the driver returns two values: (1) the window and (2) a 2 element list with the start and end indices of each window group,
 
 ```cl-transcript
 (iter
@@ -635,20 +664,17 @@ This driver is useful when iterating a sliding window across a sequence. Each it
 => (((2 2 2) (4 6)) ((2 2 4 4 4) (10 14)))
 ```
 
-```cl-transcript
-(iter
-  (with seq = '(1 3 5 2 6 7 9 4 8 4 3 2 8 8 8 9 0 0 2 4 5 3))
-  (for w :sliding-across seq :windowing-if #'oddp)
-  (collect w))
-=> ((1 3 5) (7 9) (3) (9) (5 3))
-```
-Run length encoding
+<details>
+<summary> __*Run Length Encoding*__ </summary>
+
+The driver is very useful for sequences where repeated elements have to be categorized in some way. Consider the run length encoding (RLE) example below,
 
 ```cl-transcript
 (iter
   (with seq = '(1 1 1 2 2 2 2 3 3 4 4 4 4 5 5 5 5 5 5 5 6 7 7))
   (with group-elt = (elt seq 0))
-  (for (w i) :sliding-across seq :windowing-if (lambda(x) (= group-elt x)))
+  (for (w i) :sliding-across seq
+             :windowing-if (lambda(x) (= group-elt x)))
   (collect (list (car w) (length w)) into result)
   (for second-index = (cadr i))
   (unless (> (incf second-index) (length seq))
@@ -657,7 +683,7 @@ Run length encoding
 => ((1 3) (2 4) (3 2) (4 4) (5 7) (6 1) (7 2))
 ```
 
-RLE Rosetta Code problem
+Another example from [Rosetta Code](https://www.rosettacode.org/wiki/Run-length_encoding) illustrates RLE on strings,
 
 ```
 (iter
@@ -673,8 +699,12 @@ RLE Rosetta Code problem
 => ((#\W 12) (#\B 1) (#\W 12) (#\B 3) (#\W 24) (#\B 1) (#\W 14))
 ```
 
+</details>
 
-Split string by delimiter or regex,
+<details>
+<summary> __*Split Strings by Delimiter*__ </summary>
+
+A natural use case for the driver is to split strings by a delimiter,
 
 ```
 (iter
@@ -685,35 +715,30 @@ Split string by delimiter or regex,
 => (\"The\" \"quick\" \"brown\" \"fox\" \"jumps\" \"over\" \"the\" \"lazy\" \"dog\")
 ```
 
-Binary to decimal
+The `cl-ppcre` package is better suited for windowing by regex.
 
-```
-(iter
-  (with bit-vector = #*110110011)
-  (with bit-len = (1- (length bit-vector)))
-  (for (w i) :sliding-across bit-vector
-             :windowing-if (lambda (x) (= x 1)))
-  (for start = (car i))
-  (for stop = (cadr i))
-  (for n = (1+ (- stop start)))
-  (nconcing (mapcar (lambda (x) (expt 2 (- bit-len x)))
-     (alexandria:iota n :start start :step 1)) into result)
-  (finally (return (reduce #'+ result))))
-=> 435
-```
+</details>
 
-Filter rows or columns a matrix,
+<details>
+<summary> __*Filtering*__ </summary>
+
+The `WINDOWING-IF` predicate obviously lends itself to filtering functionality,
 
 ```cl-transcript
 (iter
   (with mat = #(#(1 3 2) #(-1 0 -3) #(9 6 8)))
-  (for w :sliding-across mat :windowing-if (lambda (x) (every #'plusp x)))
+  (for w :sliding-across mat
+         :windowing-if (lambda (x) (every #'plusp x)))
   (collect w))
 => (#(#(1 3 2)) #(#(9 6 8)))
 ```
 
-Edge cases, nil sequence returns nil
+</details>
 
+<details>
+<summary> __*Edge Cases*__ </summary>
+
+An empty sequence returns `NIL`,
 
 ```cl-transcript
 (iter
@@ -723,7 +748,8 @@ Edge cases, nil sequence returns nil
 => NIL
 ```
 
-NIL returned if no contigous elements satisfies condition
+NIL is also returned if no contigous elements satisfy the predicate,
+
 ```cl-transcript
 (iter
   (with seq = '(1 5 2 3 4))
@@ -736,24 +762,27 @@ NIL returned if no contigous elements satisfies condition
 
 **PERFORMANCE**
 
+The driver is reasonably performant. An array sequence of 1 million elements takes less than 0.3s to process.
+
 ```
-(flet ((random-range (n) (- (random (1+ (* 2 n))) n)))
+(flet ((random-range (n) (- (random (1+ (* 2 n))) n))
+       (loop-random (f n) (loop for i from 0 below 1000000 collect (funcall f n))))
   (time
     (iter
-      (with seq = (make-array 1000000 :initial-contents (loop for i from 0 below 1000000 collect (random 101))))
+      (with seq = (make-array 1000000 :initial-contents (loop-random #'random 101)))
        (for w :sliding-across seq :windowing-if #'plusp))))
 
 .. Evaluation took:
-..   0.191 seconds of real time
-..   0.164019 seconds of total run time (0.099364 user, 0.064655 system)
-..   [ Run times consist of 0.113 seconds GC time, and 0.052 seconds non-GC time. ]
-..   85.86% CPU
-..   440,164,310 processor cycles
-..   32,110,528 bytes consed
+..   0.125 seconds of real time
+..   0.126364 seconds of total run time (0.074001 user, 0.052363 system)
+..   [ Run times consist of 0.067 seconds GC time, and 0.060 seconds non-GC time. ]
+..   100.80% CPU
+..   289,933,222 processor cycles
+..   32,118,304 bytes consed
 => NIL
 ```
-"
-  )
+
+")
 
 (defmacro-driver (FOR binding-form
 		      SLIDING-ACROSS seq
