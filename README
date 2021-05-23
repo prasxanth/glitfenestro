@@ -14,6 +14,41 @@ This package contains,
 that provide flexible sliding window functionality for analyzing sequences. See GLITFENESTRO.DOCS:@API-REFERENCE for details.
   
 
+## ASDF Details
+
+- **Version**: 1.0.0
+
+- **Description**: Skeleton template for Lisp project with test and documentation generator.
+
+- **License**: Unlicense.
+
+- **Author**: Prashanth Kumar
+
+- **Mailto**: prasxanth.kumar@gmail.com
+
+- **Homepage**: http://prasxanth.github.io/glitfenestro/
+
+- **Bug tracker**: https://github.com/prasxanth/glitfenestro/issues
+
+- **Source control**: http://github.com/glitfenestro.git
+
+
+## System Details
+
+This package was developed and tested on,
+
+- **OS**: macOS Big Sur
+
+- **Processor**: 2.3 GHz 8-Core Intel Core i9
+
+- **Memory**: 16 GB 2667 MHz DDR4
+
+- **Lisp**: SBCL 2.1.3
+
+- **IDE**: EMACS SLIME
+
+  
+
 ## Iterate Drivers
 
 ###### \[in package GLITFENESTRO with nicknames GFRO\]
