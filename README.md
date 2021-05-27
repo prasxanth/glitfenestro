@@ -108,7 +108,7 @@ To generate the documentation,
 
 ###### \[in package GLITFENESTRO with nicknames GFRO\]
 Two drivers are defined for the [iterate](https://common-lisp.net/project/iterate/doc/index.html) package,
-**`WINDOWING-BY`** and **`WINDOWING-IF`**. **`WINDOWING-BY`** is for fixed or variable window size. **`WINDOWING-IF`** is for window sizes that satisfy a predicate.
+**`WINDOWING-BY`** and **WINDOWING-IF**. **`WINDOWING-BY`** is for fixed or variable window size. **WINDOWING-IF** is for window sizes that satisfy a predicate.
 
 <a id='x-28GLITFENESTRO-3A-40WINDOWING-BY-20MGL-PAX-3ASECTION-29'></a>
 

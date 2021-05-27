@@ -16,20 +16,19 @@
 
 
 (asdf:defsystem "glitfenestro/tests"
-  :depends-on ("glitfenestro" "fiveam")
+  :depends-on ("glitfenestro" "fiveam" "iterate" "alexandria" "generic-cl")
   :pathname "tests/"
   :serial t
   :components ((:file "package")
 	       (:file "tests-suite" :depends-on ("package"))
-	       (:file "iterate-tests" :depends-on ("package" "tests-suite")))
+	       (:file "iterate-windowing-by-tests" :depends-on ("package" "tests-suite")))
   :perform (test-op (o c) (symbol-call :glitfenestro.tests
 				       :run-principal-suite)))
 
 ;; (ql:quickload "glitfenestro/docs")
 (asdf:defsystem "glitfenestro/docs"
   :class :package-inferred-system
-  :depends-on ("glitfenestro" "iterate"
-			      "alexandria" "serapeum")
+  :depends-on ("glitfenestro" "iterate" "alexandria" "serapeum")
   :pathname "docs/"
   :serial t
   :components ((:file "package")
