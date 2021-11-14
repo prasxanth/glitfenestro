@@ -102,7 +102,7 @@ To generate the documentation,
 
 ## 4 TODO
 	
-[] Complete test cases
+- [] Complete test cases
   
 
 <a id='x-28GLITFENESTRO-3A-40ITERATE-20MGL-PAX-3ASECTION-29'></a>
